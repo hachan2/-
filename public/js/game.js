@@ -597,6 +597,11 @@ window.addEventListener("beforeunload", leaveNow);
 
 setInterval(() => send({ type: "ping" }), 2000);
 
+resize();
+connect();
+loadTiles().then(() => requestAnimationFrame(loop));
+
+
 //여기부터
 setupJoystick();
 resize();
@@ -604,6 +609,3 @@ connect();
 loadTiles().then(() => requestAnimationFrame(loop));
 //여기까지
 
-resize();
-connect();
-loadTiles().then(() => requestAnimationFrame(loop));
