@@ -1,0 +1,16 @@
+{
+  "name": "everyones-character",
+  "version": "1.0.0",
+  "private": true,
+  "description": "32x32 캐릭터 멀티플레이어 월드",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "ws": "^8.18.3"
+  }
+}
