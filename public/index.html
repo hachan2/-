@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>모두의 캐릭터</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <canvas id="world"></canvas>
+
+    <section id="gate" class="overlay">
+      <div class="panel gate-panel">
+        <h1>모두의 캐릭터</h1>
+        <p class="sub">32×32로 나를 그리고, 들판을 걸어 다니세요.</p>
+        <label>
+          이름
+          <input id="name-input" maxlength="12" placeholder="모험가" autocomplete="off" />
+        </label>
+        <div class="editor-wrap">
+          <div>
+            <div class="editor-label">캐릭터 32×32</div>
+            <canvas id="char-canvas" width="32" height="32"></canvas>
+            <div class="tools" id="char-tools"></div>
+          </div>
+          <div>
+            <div class="editor-label">펫 32×32 <small>(비워두면 없음)</small></div>
+            <canvas id="pet-canvas" width="32" height="32"></canvas>
+            <div class="tools" id="pet-tools"></div>
+          </div>
+        </div>
+        <button id="enter-btn" class="primary">월드에 들어가기</button>
+      </div>
+    </section>
+
+    <div id="hud" class="hidden">
+      <div id="chat-panel">
+        <div id="chat-log"></div>
+        <form id="chat-form">
+          <input id="chat-input" maxlength="60" placeholder="채팅 후 Enter" autocomplete="off" />
+        </form>
+      </div>
+      <div id="side-hud">
+        <div id="online">접속 1</div>
+        <button id="pet-btn">펫 수정</button>
+        <p class="hint">WASD / 방향키 이동 · 다른 캐릭터 클릭으로 결투</p>
+      </div>
+    </div>
+
+    <div id="toast" class="hidden"></div>
+
+    <div id="duel-offer" class="modal hidden">
+      <div class="panel">
+        <h2>결투 신청</h2>
+        <p id="duel-offer-text"></p>
+        <div class="row">
+          <button id="duel-accept" class="primary">수락</button>
+          <button id="duel-decline">거절</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="duel-pick" class="modal hidden">
+      <div class="panel">
+        <h2 id="duel-pick-title">결투</h2>
+        <p>방식을 고르세요. 퀴즈는 나중에 넣을 수 있게 자리만 열어뒀습니다.</p>
+        <div class="row">
+          <button id="pick-click" class="primary">광클</button>
+          <button id="pick-quiz" disabled>상식퀴즈 (준비중)</button>
+        </div>
+        <button id="duel-pick-cancel">취소</button>
+      </div>
+    </div>
+
+    <div id="duel-play" class="modal hidden">
+      <div class="panel duel-panel">
+        <h2>광클 결투</h2>
+        <p id="duel-names"></p>
+        <div id="duel-scores"></div>
+        <button id="duel-mash">클릭!</button>
+        <p id="duel-timer"></p>
+      </div>
+    </div>
+
+    <div id="pet-modal" class="modal hidden">
+      <div class="panel">
+        <h2>펫 만들기</h2>
+        <canvas id="pet-edit-canvas" width="32" height="32"></canvas>
+        <div class="tools" id="pet-edit-tools"></div>
+        <div class="row">
+          <button id="pet-save" class="primary">적용</button>
+          <button id="pet-remove">펫 없애기</button>
+          <button id="pet-cancel">닫기</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/editor.js"></script>
+    <script src="/js/game.js"></script>
+  </body>
+</html>
