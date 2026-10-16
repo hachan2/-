@@ -14,6 +14,13 @@ const worldCanvas = document.getElementById("world");
 const ctx = worldCanvas.getContext("2d");
 const keys = new Set();
 const tiles = [];
+
+
+const joystick = { x: 0, y: 0 };
+let joystickBase = null;
+let joystickThumb = null;
+let joystickPointerId = null;
+
 const others = new Map();
 const spriteCache = new Map();
 
@@ -40,6 +47,102 @@ const petEditEditor = new PixelEditor(
   document.getElementById("pet-edit-canvas"),
   document.getElementById("pet-edit-tools")
 );
+
+//여기부터
+function isMobileDevice() {
+  return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
+    || (navigator.maxTouchPoints > 1
+      && window.matchMedia("(pointer: coarse)").matches);
+}
+
+function setupJoystick() {
+  if (!isMobileDevice()) return;
+
+  const base = document.createElement("div");
+  Object.assign(base.style, {
+    position: "fixed",
+    left: "24px",
+    bottom: "30px",
+    width: "120px",
+    height: "120px",
+    borderRadius: "50%",
+    background: "rgba(255,255,255,0.22)",
+    border: "2px solid rgba(255,255,255,0.55)",
+    zIndex: "9999",
+    touchAction: "none",
+    userSelect: "none"
+  });
+
+  const thumb = document.createElement("div");
+  Object.assign(thumb.style, {
+    position: "absolute",
+    left: "36px",
+    top: "36px",
+    width: "48px",
+    height: "48px",
+    borderRadius: "50%",
+    background: "rgba(255,255,255,0.8)",
+    border: "2px solid rgba(0,0,0,0.15)",
+    boxSizing: "border-box",
+    pointerEvents: "none"
+  });
+
+  base.appendChild(thumb);
+  document.body.appendChild(base);
+
+  joystickBase = base;
+  joystickThumb = thumb;
+
+  function updateJoystick(e) {
+    const rect = base.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    let dx = e.clientX - centerX;
+    let dy = e.clientY - centerY;
+
+    const maxDistance = 34;
+    const distance = Math.hypot(dx, dy);
+
+    if (distance > maxDistance) {
+      dx = dx / distance * maxDistance;
+      dy = dy / distance * maxDistance;
+    }
+
+    joystick.x = dx / maxDistance;
+    joystick.y = dy / maxDistance;
+
+    thumb.style.transform = `translate(${dx}px, ${dy}px)`;
+  }
+
+  base.addEventListener("pointerdown", (e) => {
+    if (joystickPointerId !== null) return;
+
+    e.preventDefault();
+    joystickPointerId = e.pointerId;
+    base.setPointerCapture(e.pointerId);
+    updateJoystick(e);
+  });
+
+  base.addEventListener("pointermove", (e) => {
+    if (e.pointerId !== joystickPointerId) return;
+    e.preventDefault();
+    updateJoystick(e);
+  });
+
+  function stopJoystick(e) {
+    if (e.pointerId !== joystickPointerId) return;
+
+    joystickPointerId = null;
+    joystick.x = 0;
+    joystick.y = 0;
+    thumb.style.transform = "translate(0px, 0px)";
+  }
+
+  base.addEventListener("pointerup", stopJoystick);
+  base.addEventListener("pointercancel", stopJoystick);
+}
+//여기까지
 
 function hashTile(cx, cy) {
   let h = seed ^ Math.imul(cx, 374761393) ^ Math.imul(cy, 668265263);
@@ -332,8 +435,8 @@ function loop(now) {
   const inDuel = Boolean(activeDuel && activeDuel.players.includes(myId));
 
   if (!inDuel && !chatting && me.sprite) {
-    let dx = 0;
-    let dy = 0;
+    let dx = joystick.x;//0이였다
+    let dy = joystick.y;//0이였다
     if (keys.has("KeyW") || keys.has("ArrowUp")) dy -= 1;
     if (keys.has("KeyS") || keys.has("ArrowDown")) dy += 1;
     if (keys.has("KeyA") || keys.has("ArrowLeft")) dx -= 1;
@@ -493,6 +596,13 @@ window.addEventListener("pagehide", leaveNow);
 window.addEventListener("beforeunload", leaveNow);
 
 setInterval(() => send({ type: "ping" }), 2000);
+
+//여기부터
+setupJoystick();
+resize();
+connect();
+loadTiles().then(() => requestAnimationFrame(loop));
+//여기까지
 
 resize();
 connect();
