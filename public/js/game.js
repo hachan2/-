@@ -242,6 +242,8 @@ function onMessage(msg) {
     case "joined":
       me.x = msg.you.x;
       me.y = msg.you.y;
+      addChat("안내: 채팅창에 /tp 이름 을 입력하면 해당 플레이어에게 텔레포트합니다", "sys");
+      toast("텔레포트 명령어: /tp 이름");
       break;
     case "spawn":
       others.set(msg.player.id, { ...msg.player, tx: msg.player.x, ty: msg.player.y, bubbleUntil: 0 });
@@ -278,6 +280,12 @@ function onMessage(msg) {
           p.bubbleUntil = performance.now() + 7000;
         }
       }
+      break;
+    case "teleport":
+      me.x = msg.x;
+      me.y = msg.y;
+      petFollow.x = me.x - 28;
+      petFollow.y = me.y + 8;
       break;
     case "pet":
       if (msg.id === myId) me.pet = msg.pet;
@@ -514,8 +522,10 @@ document.getElementById("chat-form").addEventListener("submit", (e) => {
   const text = input.value.trim();
   if (!text) return;
   send({ type: "chat", text });
-  me.bubble = text;
-  me.bubbleUntil = performance.now() + 7000;
+  if (!text.startsWith("/tp ")) {
+    me.bubble = text;
+    me.bubbleUntil = performance.now() + 7000;
+  }
   input.value = "";
   input.blur();
 });
