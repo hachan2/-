@@ -203,6 +203,33 @@ wss.on("connection", (ws) => {
         p.lastChat = now;
         const text = safeText(msg.text, 60);
         if (!text) return;
+        if (text.startsWith("/tp ")) {
+          const targetName = safeText(text.slice(4), 12);
+          const target = targetName
+            ? [...players.values()].find((player) =>
+                player.joined &&
+                player.id !== id &&
+                player.name.localeCompare(targetName, "ko", { sensitivity: "base" }) === 0
+              )
+            : null;
+
+          if (!target) {
+            send(ws, { type: "toast", text: targetName ? `${targetName} 님을 찾을 수 없습니다` : "사용법: /tp 이름" });
+            return;
+          }
+          if (target.duelId || p.duelId) {
+            send(ws, { type: "toast", text: "결투 중에는 텔레포트할 수 없습니다" });
+            return;
+          }
+
+          p.x = target.x;
+          p.y = target.y;
+          p.dir = target.dir;
+          send(ws, { type: "teleport", x: p.x, y: p.y, targetName: target.name });
+          broadcast({ type: "move", id, x: p.x, y: p.y, dir: p.dir }, ws);
+          send(ws, { type: "toast", text: `${target.name} 님에게 텔레포트했습니다` });
+          return;
+        }
         p.bubble = text;
         p.bubbleUntil = now + 7000;
         broadcast({ type: "chat", id, name: p.name, text, x: p.x, y: p.y });
