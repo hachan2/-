@@ -47,6 +47,10 @@
           <input id="chat-input" maxlength="60" placeholder="채팅 후 Enter" autocomplete="off" />
         </form>
       </div>
+      <div id="minimap-panel">
+        <div class="minimap-title">미니맵</div>
+        <canvas id="minimap" width="180" height="180"></canvas>
+      </div>
       <div id="side-hud">
         <div id="online">접속 1</div>
         <button id="pet-btn">펫 수정</button>
@@ -103,6 +107,7 @@
     </div>
 
     <script src="/js/editor.js"></script>
+    <script src="/js/minimap.js"></script>
     <script src="/js/game.js"></script>
   </body>
 </html>
