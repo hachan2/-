@@ -22,6 +22,7 @@ let joystickPointerId = null;
 
 const others = new Map();
 const spriteCache = new Map();
+const minimap = new MiniMap(document.getElementById("minimap"));
 
 let seed = 1;
 let myId = null;
@@ -479,6 +480,8 @@ function loop(now) {
     if (!p.sprite && !p.local) return;
     drawActor(p, camX, camY, now, p.local);
   });
+
+  minimap.update(me, others);
 
   requestAnimationFrame(loop);
 }
