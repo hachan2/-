@@ -15,7 +15,6 @@ const ctx = worldCanvas.getContext("2d");
 const keys = new Set();
 const tiles = [];
 
-
 const joystick = { x: 0, y: 0 };
 let joystickBase = null;
 let joystickThumb = null;
@@ -48,7 +47,6 @@ const petEditEditor = new PixelEditor(
   document.getElementById("pet-edit-tools")
 );
 
-//여기부터
 function isMobileDevice() {
   return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
     || (navigator.maxTouchPoints > 1
@@ -142,7 +140,6 @@ function setupJoystick() {
   base.addEventListener("pointerup", stopJoystick);
   base.addEventListener("pointercancel", stopJoystick);
 }
-//여기까지
 
 function hashTile(cx, cy) {
   let h = seed ^ Math.imul(cx, 374761393) ^ Math.imul(cy, 668265263);
@@ -435,8 +432,8 @@ function loop(now) {
   const inDuel = Boolean(activeDuel && activeDuel.players.includes(myId));
 
   if (!inDuel && !chatting && me.sprite) {
-    let dx = joystick.x;//0이였다
-    let dy = joystick.y;//0이였다
+    let dx = joystick.x;
+    let dy = joystick.y;
     if (keys.has("KeyW") || keys.has("ArrowUp")) dy -= 1;
     if (keys.has("KeyS") || keys.has("ArrowDown")) dy += 1;
     if (keys.has("KeyA") || keys.has("ArrowLeft")) dx -= 1;
@@ -597,15 +594,7 @@ window.addEventListener("beforeunload", leaveNow);
 
 setInterval(() => send({ type: "ping" }), 2000);
 
-resize();
-connect();
-loadTiles().then(() => requestAnimationFrame(loop));
-
-
-//여기부터
 setupJoystick();
 resize();
 connect();
 loadTiles().then(() => requestAnimationFrame(loop));
-//여기까지
-
