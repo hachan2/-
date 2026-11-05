@@ -247,6 +247,35 @@ button:disabled {
   margin-top: 12px;
 }
 
+#minimap-panel {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 188px;
+  padding: 4px;
+  background: rgba(244, 239, 226, 0.94);
+  border: 3px solid var(--line);
+  pointer-events: none;
+  text-align: center;
+}
+
+.minimap-title {
+  height: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 20px;
+}
+
+#minimap {
+  display: block;
+  width: 180px;
+  height: 180px;
+  background: #86a66d;
+  border: 1px solid var(--line);
+  image-rendering: pixelated;
+}
+
 #toast {
   position: fixed;
   bottom: 24px;
@@ -276,4 +305,23 @@ button:disabled {
 #duel-scores {
   font-size: 22px;
   font-weight: 700;
+}
+
+@media (max-width: 760px) {
+  #minimap-panel {
+    top: 150px;
+    left: 12px;
+    transform: none;
+    width: 138px;
+  }
+
+  #minimap {
+    width: 130px;
+    height: 130px;
+  }
+
+  .minimap-title {
+    height: 18px;
+    line-height: 18px;
+  }
 }
