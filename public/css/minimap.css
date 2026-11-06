@@ -1,0 +1,19 @@
+#minimap-panel {
+  z-index: 1;
+  pointer-events: auto;
+}
+
+.minimap-title {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+#minimap-panel.is-dragging .minimap-title {
+  cursor: grabbing;
+}
+
+#minimap-panel .minimap-title span {
+  margin-left: 4px;
+  opacity: 0.55;
+}

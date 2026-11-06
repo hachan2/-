@@ -256,8 +256,9 @@ button:disabled {
   padding: 4px;
   background: rgba(244, 239, 226, 0.94);
   border: 3px solid var(--line);
-  pointer-events: none;
+  pointer-events: auto;
   text-align: center;
+  z-index: 10;
 }
 
 .minimap-title {
@@ -265,6 +266,13 @@ button:disabled {
   font-size: 12px;
   font-weight: 700;
   line-height: 20px;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+#minimap-panel.is-dragging .minimap-title {
+  cursor: grabbing;
 }
 
 #minimap {
