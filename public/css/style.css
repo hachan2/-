@@ -223,6 +223,10 @@ button:disabled {
   text-align: right;
 }
 
+#minimap-settings-btn {
+  margin-left: 4px;
+}
+
 #online {
   background: rgba(244, 239, 226, 0.92);
   border: 3px solid var(--line);
@@ -274,6 +278,36 @@ button:disabled {
   background: #86a66d;
   border: 1px solid var(--line);
   image-rendering: pixelated;
+}
+
+#minimap-settings {
+  position: absolute;
+  top: 58px;
+  right: 12px;
+  width: 220px;
+  padding: 12px;
+  background: rgba(244, 239, 226, 0.96);
+  border: 3px solid var(--line);
+  pointer-events: auto;
+  text-align: left;
+}
+
+.minimap-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.minimap-fields label {
+  margin: 0;
+  gap: 3px;
+}
+
+.minimap-fields input {
+  width: 100%;
+  min-width: 0;
+  padding: 4px 6px;
 }
 
 #toast {
