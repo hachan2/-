@@ -583,6 +583,79 @@ document.getElementById("duel-mash").addEventListener("click", () => {
   send({ type: "duel_click" });
 });
 
+function setupMinimapSettings() {
+  const panel = document.getElementById("minimap-panel");
+  const settings = document.getElementById("minimap-settings");
+  const xInput = document.getElementById("minimap-x");
+  const yInput = document.getElementById("minimap-y");
+  const widthInput = document.getElementById("minimap-width");
+  const heightInput = document.getElementById("minimap-height");
+  const storageKey = "minimap-layout";
+
+  const getDefaults = () => ({
+    x: Math.round((window.innerWidth - 188) / 2),
+    y: 12,
+    width: 180,
+    height: 180
+  });
+
+  let layout;
+  try {
+    layout = { ...getDefaults(), ...JSON.parse(localStorage.getItem(storageKey) || "{}") };
+  } catch {
+    layout = getDefaults();
+  }
+
+  const syncInputs = () => {
+    xInput.value = String(layout.x);
+    yInput.value = String(layout.y);
+    widthInput.value = String(layout.width);
+    heightInput.value = String(layout.height);
+  };
+
+  const applyLayout = () => {
+    layout.width = Math.max(80, Math.min(500, Number(layout.width) || 180));
+    layout.height = Math.max(80, Math.min(500, Number(layout.height) || 180));
+    layout.x = Math.max(0, Math.min(window.innerWidth - layout.width - 8, Number(layout.x) || 0));
+    layout.y = Math.max(0, Math.min(window.innerHeight - layout.height - 32, Number(layout.y) || 0));
+
+    panel.style.left = `${layout.x}px`;
+    panel.style.top = `${layout.y}px`;
+    panel.style.transform = "none";
+    panel.style.width = `${layout.width + 8}px`;
+    minimap.setSize(layout.width, layout.height);
+
+    localStorage.setItem(storageKey, JSON.stringify(layout));
+    syncInputs();
+  };
+
+  const updateFromInputs = () => {
+    layout.x = Number(xInput.value);
+    layout.y = Number(yInput.value);
+    layout.width = Number(widthInput.value);
+    layout.height = Number(heightInput.value);
+    applyLayout();
+  };
+
+  document.getElementById("minimap-settings-btn").addEventListener("click", () => {
+    settings.classList.toggle("hidden");
+  });
+  document.getElementById("minimap-settings-close").addEventListener("click", () => {
+    settings.classList.add("hidden");
+  });
+  document.getElementById("minimap-reset").addEventListener("click", () => {
+    layout = getDefaults();
+    applyLayout();
+  });
+
+  [xInput, yInput, widthInput, heightInput].forEach((input) => {
+    input.addEventListener("input", updateFromInputs);
+  });
+  window.addEventListener("resize", applyLayout);
+
+  applyLayout();
+}
+
 window.addEventListener("keydown", (e) => {
   keys.add(e.code);
   if (e.code === "Enter" && document.activeElement !== document.getElementById("chat-input")) {
@@ -608,6 +681,7 @@ window.addEventListener("beforeunload", leaveNow);
 setInterval(() => send({ type: "ping" }), 2000);
 
 setupJoystick();
+setupMinimapSettings();
 resize();
 connect();
 loadTiles().then(() => requestAnimationFrame(loop));
