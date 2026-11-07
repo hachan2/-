@@ -54,7 +54,21 @@
       <div id="side-hud">
         <div id="online">접속 1</div>
         <button id="pet-btn">펫 수정</button>
+        <button id="minimap-settings-btn">미니맵 설정</button>
         <p class="hint">WASD / 방향키 이동 · <code>/tp 이름</code> 텔레포트 · 다른 캐릭터 클릭으로 결투</p>
+      </div>
+      <div id="minimap-settings" class="hidden">
+        <strong>미니맵 위치 및 크기</strong>
+        <div class="minimap-fields">
+          <label>X <input id="minimap-x" type="number" min="0" step="1" /></label>
+          <label>Y <input id="minimap-y" type="number" min="0" step="1" /></label>
+          <label>너비 <input id="minimap-width" type="number" min="80" max="500" step="10" /></label>
+          <label>높이 <input id="minimap-height" type="number" min="80" max="500" step="10" /></label>
+        </div>
+        <div class="row">
+          <button id="minimap-reset" type="button">기본값</button>
+          <button id="minimap-settings-close" type="button">닫기</button>
+        </div>
       </div>
     </div>
 
