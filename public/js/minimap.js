@@ -5,6 +5,13 @@ class MiniMap {
     this.range = 600;
   }
 
+  setSize(width, height = width) {
+    this.canvas.width = width;
+    this.canvas.height = height;
+    this.canvas.style.width = `${width}px`;
+    this.canvas.style.height = `${height}px`;
+  }
+
   update(me, others) {
     const ctx = this.ctx;
     const width = this.canvas.width;
