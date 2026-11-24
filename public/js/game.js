@@ -559,6 +559,31 @@ worldCanvas.addEventListener("click", (e) => {
   document.getElementById("duel-pick").classList.remove("hidden");
 });
 
+worldCanvas.addEventListener("mobile-player-tap", (e) => {
+  const camX = me.x - worldCanvas.width / 2;
+  const camY = me.y - worldCanvas.height / 2;
+  const { clientX, clientY } = e.detail;
+  let best = null;
+  let bestDistance = Infinity;
+
+  others.forEach((p) => {
+    const screenX = p.x - camX;
+    const screenY = p.y - camY;
+    if (Math.abs(clientX - screenX) > 48 || clientY < screenY - 122 || clientY > screenY + 40) return;
+
+    const distance = Math.hypot(clientX - screenX, clientY - (screenY - 48));
+    if (distance < bestDistance) {
+      best = p;
+      bestDistance = distance;
+    }
+  });
+
+  if (!best) return;
+  duelTargetId = best.id;
+  document.getElementById("duel-pick-title").textContent = `${best.name} 와 결투`;
+  document.getElementById("duel-pick").classList.remove("hidden");
+});
+
 document.getElementById("pick-click").addEventListener("click", () => {
   send({ type: "duel_request", targetId: duelTargetId, mode: "click" });
   document.getElementById("duel-pick").classList.add("hidden");
